@@ -19,4 +19,28 @@ def load_customers():
 
     print("Customers loaded successfully.")
 
-   
+def load_products():
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    df = pd.read_csv("data/products_raw.csv")
+
+    for _, row in df.iterrows():
+        cursor.execute("""
+            INSERT INTO dim_product 
+            (product_id, product_name, category, cost_price, selling_price)
+            VALUES (%s, %s, %s, %s, %s)
+        """, (
+            int(row["product_id"]),
+            row["product_name"],
+            row["category"],
+            float(row["cost_price"]),
+            float(row["selling_price"])
+        ))
+
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    print("Products loaded successfully.")
+  
