@@ -1,7 +1,6 @@
 import pandas as pd
 import mysql.connector
 
-# ===== DB CONNECTION =====
 conn = mysql.connector.connect(
     host="localhost",
     user="root",
@@ -11,37 +10,45 @@ conn = mysql.connector.connect(
 
 cursor = conn.cursor()
 
-# ===== LOAD CSV FILES =====
+# Load CSVs
 customers_df = pd.read_csv("data/customers_raw.csv")
 products_df = pd.read_csv("data/products_raw.csv")
 sales_df = pd.read_csv("data/sales_raw.csv")
 
-# ===== INSERT CUSTOMERS =====
+# ---- INSERT CUSTOMERS ----
 for _, row in customers_df.iterrows():
     cursor.execute("""
-        INSERT INTO staging_customers (customer_id, customer_name, city)
+        INSERT INTO staging_customers (customer_id, age, gender)
         VALUES (%s, %s, %s)
-    """, (row['customer_id'], row['customer_name'], row['city']))
+    """, (row['customer_id'], row['age'], row['gender']))
 
-# ===== INSERT PRODUCTS =====
+# ---- INSERT PRODUCTS ----
 for _, row in products_df.iterrows():
     cursor.execute("""
-        INSERT INTO staging_products (product_id, product_name, category, price)
-        VALUES (%s, %s, %s, %s)
-    """, (row['product_id'], row['product_name'], row['category'], row['price']))
+        INSERT INTO staging_products (product_id, product_name, category, cost_price, selling_price)
+        VALUES (%s, %s, %s, %s, %s)
+    """, (
+        row['product_id'],
+        row['product_name'],
+        row['category'],
+        row['cost_price'],
+        row['selling_price']
+    ))
 
-# ===== INSERT SALES =====
+# ---- INSERT SALES ----
 for _, row in sales_df.iterrows():
     cursor.execute("""
-        INSERT INTO staging_sales (order_id, customer_id, product_id, order_date, quantity, amount)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        INSERT INTO staging_sales (sale_id, date, customer_id, product_id, city, quantity, unit_price, discount)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
     """, (
-        row['order_id'],
+        row['sale_id'],
+        row['date'],
         row['customer_id'],
         row['product_id'],
-        row['order_date'],
+        row['city'],
         row['quantity'],
-        row['amount']
+        row['unit_price'],
+        row['discount']
     ))
 
 conn.commit()

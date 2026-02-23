@@ -37,7 +37,7 @@ CREATE TABLE dim_city (
 -- =========================
 
 CREATE TABLE fact_sales (
-    sale_id INT PRIMARY KEY,
+    sale_key INT AUTO_INCREMENT PRIMARY KEY,
     date_key INT,
     customer_key INT,
     product_key INT,
