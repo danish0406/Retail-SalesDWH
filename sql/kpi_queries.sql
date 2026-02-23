@@ -63,3 +63,18 @@ FROM fact_sales f
 JOIN dim_date d ON f.date_key = d.date_key
 GROUP BY d.year, d.month
 ORDER BY d.year, d.month;
+
+
+-- Profit Margin %
+SELECT 
+    (SUM(profit) / SUM(revenue)) * 100 AS profit_margin_percent
+FROM fact_sales;
+
+
+-- Revenue by Gender
+SELECT 
+    dc.gender,
+    SUM(f.revenue) AS total_revenue
+FROM fact_sales f
+JOIN dim_customer dc ON f.customer_key = dc.customer_key
+GROUP BY dc.gender;
