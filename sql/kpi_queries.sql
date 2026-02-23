@@ -42,3 +42,13 @@ JOIN dim_customer dc ON f.customer_key = dc.customer_key
 GROUP BY dc.customer_id
 ORDER BY total_spent DESC
 LIMIT 5;
+
+
+-- Revenue by Product
+SELECT 
+    dp.product_name,
+    SUM(f.revenue) AS total_revenue
+FROM fact_sales f
+JOIN dim_product dp ON f.product_key = dp.product_key
+GROUP BY dp.product_name
+ORDER BY total_revenue DESC;
