@@ -31,3 +31,14 @@ FROM fact_sales f
 JOIN dim_city c ON f.city_key = c.city_key
 GROUP BY c.city_name
 ORDER BY total_revenue DESC;
+
+
+-- Top 5 Customers
+SELECT 
+    dc.customer_id,
+    SUM(f.revenue) AS total_spent
+FROM fact_sales f
+JOIN dim_customer dc ON f.customer_key = dc.customer_key
+GROUP BY dc.customer_id
+ORDER BY total_spent DESC
+LIMIT 5;
