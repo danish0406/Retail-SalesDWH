@@ -2,13 +2,16 @@
 SELECT SUM(revenue) AS total_revenue
 FROM fact_sales;
 
--- Total Orders
-SELECT COUNT(*) AS total_orders
-FROM fact_sales;
 
 -- Total Orders
 SELECT COUNT(*) AS total_orders
 FROM fact_sales;
+
+
+-- Total Orders
+SELECT COUNT(*) AS total_orders
+FROM fact_sales;
+
 
 -- Revenue by Year
 SELECT 
@@ -19,3 +22,12 @@ JOIN dim_date d ON f.date_key = d.date_key
 GROUP BY d.year
 ORDER BY d.year;
 
+
+-- Revenue by City
+SELECT 
+    c.city_name,
+    SUM(f.revenue) AS total_revenue
+FROM fact_sales f
+JOIN dim_city c ON f.city_key = c.city_key
+GROUP BY c.city_name
+ORDER BY total_revenue DESC;
